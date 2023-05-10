@@ -133,23 +133,23 @@ if __name__ == "__main__" :
 
     time.sleep(1)
 
-    impedance_control.open_gripper()
+    # impedance_control.open_gripper()
     impedance_control.close_gripper()
 
-    # current_pose = impedance_control.get_current_pose()
-    # print(current_pose)
-    # current_pose[0] -= 0.1
-    # impedance_control.move_to_pose(current_pose)
+    current_pose = impedance_control.get_current_pose()
+    print(current_pose)
+    current_pose[0] -= 0.1
+    impedance_control.move_to_pose(current_pose)
 
-    # time.sleep(5)
+    time.sleep(5)
 
-    # impedance_control.configure_stiffness(100.0, 10.0, 0.2)
+    impedance_control.configure_stiffness(100.0, 10.0, 0.2)
 
-    # time.sleep(1)
+    time.sleep(1)
 
-    # current_pose = impedance_control.get_current_pose()
-    # current_pose[0] -= 0.1
-    # impedance_control.move_to_pose(current_pose)
+    current_pose = impedance_control.get_current_pose()
+    current_pose[0] -= 0.1
+    impedance_control.move_to_pose(current_pose)
 
-    # time.sleep(5)
-    # print(current_pose)
+    time.sleep(5)
+    print(current_pose)

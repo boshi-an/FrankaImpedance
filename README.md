@@ -8,4 +8,4 @@ rebuild the source of franka_ros.
 
 Feel free to run the controller. **Be careful with real robots!**
 
-To use the impedance controller: `roslaunch franka_example_controllers cartesian_impedance_update_controller.launch robot_ip:=172.16.0.2` and use the python interface.
+To use the impedance controller directly use the python interface without starting any ros node. Be careful with the initial state of robot, the robot need to be in the blue mode to use this interface.

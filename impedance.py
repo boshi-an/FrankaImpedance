@@ -7,27 +7,10 @@ import numpy as np
 import time
 import actionlib
 import franka_gripper.msg
-import sapien.core as sapien
 
 class ImpedanceControl:
 
     def __init__ (self) :
-        
-        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-        roslaunch.configure_logging(uuid)
-
-        launch_file = ['franka_example_controllers', 'cartesian_impedance_update_controller.launch', 'robot_ip:=172.16.0.2']
-        roslaunch_args = launch_file[2:]  # empty but doesn't affect the outcome
-        roslaunch_file = [(roslaunch.rlutil.resolve_launch_arguments(launch_file)[0], roslaunch_args)]
-        # roslaunch_file = roslaunch.rlutil.resolve_launch_arguments(launch_file)
-        parent = roslaunch.parent.ROSLaunchParent(uuid, roslaunch_file)
-
-        parent.start()
-        
-        # try:
-        #     parent.spin()
-        # finally:
-        #     parent.shutdown()
 
         self.default_translational_stiffness = 200.0
         self.default_rotational_stiffness = 10.0
@@ -59,15 +42,6 @@ class ImpedanceControl:
         #     message.pose.orientation.w = 1.0
         #     self.publisher.publish(message)
         #     self.rate.sleep()
-    
-    def _process_pose(self, pose) :
-        
-        if isinstance(pose, list) or isinstance(pose, np.ndarray):
-            return np.asarray(pose)
-        elif isinstance(pose, sapien.Pose) :
-            return np.concatenate([pose.p, pose.q])
-        else :
-            raise ValueError("Invalid pose type")
     
     def configure_stiffness(self, translational, rotational, nullspace) :
 
@@ -101,8 +75,7 @@ class ImpedanceControl:
         nparray[6] = self.current_pose.pose.orientation.z
         return nparray
     
-    def move_to_pose(self, pose) :
-        nparray = self._process_pose(pose)
+    def move_to_pose(self, nparray) :
         pose = PoseStamped()
         pose.pose.position.x = nparray[0]
         pose.pose.position.y = nparray[1]

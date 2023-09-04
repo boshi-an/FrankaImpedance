@@ -1,11 +1,11 @@
 from segment_anything import SamPredictor, sam_model_registry
-from package.impedance import ImpedanceControl
+from franka_impedance.impedance import ImpedanceControl
 import roslaunch
 import yaml
 import time
 import sapien.core as sapien
 import numpy as np
-from package.realworld_env import RealworldEnv
+from franka_impedance.realworld_env import RealworldEnv
 
 checkpt_path = "/home/hyperplane/ros-neotic-franka/segment-anything"
 calibration_path = "panda_rs_handeyecalibration_eye_on_hand.yaml"

@@ -7,7 +7,7 @@ import numpy as np
 import time
 import actionlib
 import franka_gripper.msg
-from package import impedance
+from franka_impedance import impedance
 
 def get_distance(pose1, pose2):
     return (pose1[0]- pose2[0]) ** 2 + (pose1[1]- pose2[1]) ** 2 + (pose1[2]- pose2[2]) ** 2

@@ -1,0 +1,6 @@
+setup.py
+frankaimpedance.egg-info/PKG-INFO
+frankaimpedance.egg-info/SOURCES.txt
+frankaimpedance.egg-info/dependency_links.txt
+frankaimpedance.egg-info/requires.txt
+frankaimpedance.egg-info/top_level.txt

@@ -1,3 +1,4 @@
-defusedxml
-rospkg
+roslaunch
 sapien
+rospkg
+defusedxml

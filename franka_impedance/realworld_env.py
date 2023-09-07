@@ -78,8 +78,17 @@ class RealworldEnv :
 
     def get_hand_pose(self) :
         
-        return self._process_pose(self.controller.get_current_pose())
+        d_pose = sapien.Pose(q = [0, 0.707106781, 0, 0.707106781]).inv()
+        return self._process_pose(self.controller.get_current_pose()) * d_pose
     
     def take_picture(self) :
         
         return self.camera.take_picture()
+    
+    def close_gripper(self) :
+
+        self.controller.close_gripper()
+    
+    def open_gripper(self) :
+
+        self.controller.open_gripper()

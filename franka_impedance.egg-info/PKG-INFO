@@ -1,17 +1,15 @@
-Metadata-Version: 1.1
+Metadata-Version: 2.1
 Name: franka-impedance
 Version: 0.0.1
 Summary: My first Python package
-Home-page: UNKNOWN
 Author: Boshi An
 Author-email: <boshi_an@std.pku.edu.cn>
-License: UNKNOWN
-Description: My first Python package with a slightly longer description
 Keywords: python
-Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
 Classifier: Intended Audience :: Education
 Classifier: Programming Language :: Python :: 2
 Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: MacOS :: MacOS X
 Classifier: Operating System :: Microsoft :: Windows
+
+My first Python package with a slightly longer description

@@ -77,8 +77,8 @@ impedance_controler.configure_stiffness(130.0, 20.0, 0.2) #the second parameter 
 
 time.sleep(3)
 
-# impedance_controler.open_gripper()
-impedance_controler.close_gripper()
+impedance_controler.open_gripper()
+# impedance_controler.close_gripper()
 step = 0.08
 iterations = 10
 delta_pose = np.array([step, 0, 0, 0, 0, 0, 0])

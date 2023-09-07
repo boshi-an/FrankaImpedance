@@ -133,7 +133,8 @@ class ImpedanceControl:
     
     def open_gripper(self) :
 
-        goal = franka_gripper.msg.MoveGoal()
+        # goal = franka_gripper.msg.MoveGoal()
+        goal = franka_gripper.msg.GraspGoal()
         goal.width = 0.04
         goal.epsilon.inner = 0.005
         goal.epsilon.outer = 0.005

@@ -105,8 +105,29 @@ bool CartesianImpedanceUpdateController::init(hardware_interface::RobotHW* robot
   position_d_target_.setZero();
   orientation_d_target_.coeffs() << 0.0, 0.0, 0.0, 1.0;
 
-  cartesian_stiffness_.setZero();
+  // cartesian_stiffness_.setZero();
   cartesian_damping_.setZero();
+  // cartesian_damping_target_.setIdentity();
+  // cartesian_damping_target_ = cartesian_damping_target_ * 30;
+  cartesian_stiffness_.setZero();
+  // cartesian_stiffness_target_.setIdentity();
+  // cartesian_stiffness_target_ = cartesian_stiffness_target_ * 200;
+  // cartesian_stiffness_.setIdentity();
+  // cartesian_stiffness_ = cartesian_stiffness_ * 20;
+  // cartesian_damping_.coeff() << 0.0;
+
+  cartesian_stiffness_target_.setIdentity();
+  cartesian_stiffness_target_.topLeftCorner(3, 3)
+      << 130.0 * Eigen::Matrix3d::Identity();
+  cartesian_stiffness_target_.bottomRightCorner(3, 3)
+      << 20.0 * Eigen::Matrix3d::Identity();
+  cartesian_damping_target_.setIdentity();
+  // Damping ratio = 1
+  cartesian_damping_target_.topLeftCorner(3, 3)
+      << 2.0 * sqrt(130.0) * Eigen::Matrix3d::Identity();
+  cartesian_damping_target_.bottomRightCorner(3, 3)
+      << 2.0 * sqrt(20.0) * Eigen::Matrix3d::Identity();
+  nullspace_stiffness_target_ = 0.2;
 
   return true;
 }
@@ -160,7 +181,12 @@ void CartesianImpedanceUpdateController::update(const ros::Time& /*time*/,
   msg.pose.orientation.z = orientation.z();
   msg.pose.orientation.w = orientation.w();
   ee_report.publish(msg);
-  // ros::spinOnce();
+  ros::spinOnce();
+
+  // printf("Current x:%.2lf y:%.2lf z:%.2lf qw:%.2lf qx:%.2lf qy:%.2lf qz: %.2lf\n",
+  //       position(0), position(1), position(2), orientation.w(), orientation.x(), orientation.y(), orientation.z());
+  // printf("Desired x:%.2lf y:%.2lf z:%.2lf qw:%.2lf qx:%.2lf qy:%.2lf qz: %.2lf\n",
+  //       position_d_(0), position_d_(1), position_d_(2), orientation_d_.w(), orientation_d_.x(), orientation_d_.y(), orientation_d_.z());
 
   // compute error to desired pose
   // position error
@@ -195,6 +221,18 @@ void CartesianImpedanceUpdateController::update(const ros::Time& /*time*/,
                        (nullspace_stiffness_ * (q_d_nullspace_ - q) -
                         (2.0 * sqrt(nullspace_stiffness_)) * dq);
   // Desired torque
+  // printf("tau_task: %8lf; tau_null: %8lf; coriolis: %8lf\n", tau_task(0), tau_nullspace(0), coriolis(0));
+  // printf("stiffness: %lf\n", cartesian_stiffness_(0));
+  // printf("stiffness_target: %lf\n", cartesian_stiffness_target_(0));
+  // printf("cartesian_stiffness_: %8lf; cartesian_damping_: %8lf\n", cartesian_stiffness_(0), cartesian_damping_(0));
+
+  for (size_t i = 0; i < 7; ++i) {
+    tau_task(i, 0) = std::min(std::max(tau_task(i, 0), -10.), 10.);
+  }
+  
+  // for (int i=0; i<7; i++)
+  //   printf("%.2lf ", tau_d[i]);
+  // printf("\n");
   tau_d << tau_task + tau_nullspace + coriolis;
   // Saturate torque rate to avoid discontinuities
   tau_d << saturateTorqueRate(tau_d, tau_J_d);
@@ -210,6 +248,9 @@ void CartesianImpedanceUpdateController::update(const ros::Time& /*time*/,
       filter_params_ * cartesian_damping_target_ + (1.0 - filter_params_) * cartesian_damping_;
   nullspace_stiffness_ =
       filter_params_ * nullspace_stiffness_target_ + (1.0 - filter_params_) * nullspace_stiffness_;
+  
+
+  
   std::lock_guard<std::mutex> position_d_target_mutex_lock(
       position_and_orientation_d_target_mutex_);
   position_d_ = filter_params_ * position_d_target_ + (1.0 - filter_params_) * position_d_;

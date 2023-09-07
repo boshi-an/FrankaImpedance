@@ -144,7 +144,10 @@ void CartesianImpedanceExampleController::update(const ros::Time& /*time*/,
   Eigen::Affine3d transform(Eigen::Matrix4d::Map(robot_state.O_T_EE.data()));
   Eigen::Vector3d position(transform.translation());
   Eigen::Quaterniond orientation(transform.rotation());
-
+  printf("Current x:%.2lf y:%.2lf z:%.2lf qw:%.2lf qx:%.2lf qy:%.2lf qz: %.2lf\n",
+        position(0), position(1), position(2), orientation.w(), orientation.x(), orientation.y(), orientation.z());
+  printf("Desired x:%.2lf y:%.2lf z:%.2lf qw:%.2lf qx:%.2lf qy:%.2lf qz: %.2lf\n",
+        position_d_(0), position_d_(1), position_d_(2), orientation_d_.w(), orientation_d_.x(), orientation_d_.y(), orientation_d_.z());
   // compute error to desired pose
   // position error
   Eigen::Matrix<double, 6, 1> error;
@@ -178,6 +181,11 @@ void CartesianImpedanceExampleController::update(const ros::Time& /*time*/,
                        (nullspace_stiffness_ * (q_d_nullspace_ - q) -
                         (2.0 * sqrt(nullspace_stiffness_)) * dq);
   // Desired torque
+  printf("cartesian_stiffness_: %8lf; cartesian_damping_: %8lf\n", cartesian_stiffness_(0), cartesian_damping_(0));
+
+  // for (int i=0; i<7; i++)
+  //   printf("%.2lf ", tau_d[i]);
+  // printf("\n");
   tau_d << tau_task + tau_nullspace + coriolis;
   // Saturate torque rate to avoid discontinuities
   tau_d << saturateTorqueRate(tau_d, tau_J_d);

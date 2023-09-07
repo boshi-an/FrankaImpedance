@@ -152,31 +152,41 @@ class ImpedanceControl:
 if __name__ == "__main__" :
 
     impedance_control = ImpedanceControl()
+
+    time.sleep(2)
     
     tmp = input("Type in anything to start. Be careful, the robot will move. ")
 
+    impedance_control.configure_stiffness(130.0, 20.0, 0.2)
 
-    impedance_control.configure_stiffness(200.0, 20.0, 0.5)
+    time.sleep(2)
 
-    time.sleep(1)
+    # # impedance_control.open_gripper()
+    # impedance_control.close_gripper()
 
-    # impedance_control.open_gripper()
-    impedance_control.close_gripper()
+    current_pose1 = impedance_control.get_current_pose()
+    # print("init_pos", current_pose1)
+    current_pose1[0] += 0.1
+    # current_pose1[:7] = [0.30101646, -0.00,  0.49053053,   0,   0,   1.,   0. ]
+    print("target_pos", current_pose1)
+    # [0.33, 0, 0.4], [0.788205, 0, 0.615412, 0]
 
-    current_pose = impedance_control.get_current_pose()
-    print(current_pose)
-    current_pose[0] -= 0.1
-    impedance_control.move_to_pose(current_pose)
+    print("move to next pose")
+    impedance_control.move_to_pose(current_pose1)
+    for i in range(20) :
 
-    time.sleep(5)
+        time.sleep(1)
+        current_pose2 = impedance_control.get_current_pose()
+        print("now_pos", current_pose2)
 
-    impedance_control.configure_stiffness(100.0, 10.0, 0.2)
 
-    time.sleep(1)
+    # impedance_control.configure_stiffness(100.0, 10.0, 0.2)
 
-    current_pose = impedance_control.get_current_pose()
-    current_pose[0] -= 0.1
-    impedance_control.move_to_pose(current_pose)
+    # time.sleep(1)
 
-    time.sleep(5)
-    print(current_pose)
+    # current_pose = impedance_control.get_current_pose()
+    # current_pose[0] -= 0.1
+    # impedance_control.move_to_pose(current_pose)
+
+    # time.sleep(5)
+    # print(current_pose)

@@ -64,12 +64,17 @@ class RealworldEnv :
     def hand_move_to(self, pose) :
         
         pose = self._process_pose(pose)
-        self.controller.move_to_pose(pose)
+        d_pose = sapien.Pose(q = [0, 0.707106781, 0, 0.707106781])
+        self.controller.move_to_pose(pose * d_pose)
 
     def get_cam_pose(self) :
         
         hand_pose = self.get_hand_pose()
         return hand_pose * self.cam_to_hand
+    
+    def get_cam_rgb(self) :
+        
+        pass
 
     def get_hand_pose(self) :
         

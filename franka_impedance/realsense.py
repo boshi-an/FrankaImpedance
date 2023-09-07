@@ -1,4 +1,5 @@
 import pyrealsense2 as rs
+import numpy as np
 
 def init_realsense() :
     
@@ -50,7 +51,7 @@ class RealsenseCamera :
     
     def __init__(self) :
         
-        self.pipeline = init_realsense
+        self.pipeline = init_realsense()
     
     def take_picture(self) :
         
